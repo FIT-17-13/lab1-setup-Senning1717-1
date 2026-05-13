@@ -101,43 +101,27 @@ Service nào gọi đến service này?
 ```mermaid
 flowchart LR
 
-%% ===== ACTORS =====
+%% Actors
 GateDevice[Gate Device]
 Admin[Admin]
-Student[Student/Staff]
 
-%% ===== SERVICE BOUNDARY =====
-subgraph AccessGateService["Access Gates Service"]
-    
+%% Access Gate Service
+subgraph AccessGateService
     API[API Layer]
     Logic[Access Control Logic]
-    CardMgr[Card Management]
-    GateMgr[Gate Management]
-    LogMgr[Access Log Manager]
-    DB[(Access Gate Database)]
-    
-    API --> Logic
-    Logic --> CardMgr
-    Logic --> GateMgr
-    Logic --> LogMgr
-    
-    CardMgr --> DB
-    GateMgr --> DB
-    LogMgr --> DB
+    DB[(Access Gate DB)]
 end
 
-%% ===== EXTERNAL SERVICES =====
-IdentityService[Identity Service]
-NotificationService[Notification Service]
-ReportingService[Reporting Service]
+%% Other Services
+CoreService[Core Business Service]
+AnalyticsService[Analytics Service]
 
-%% ===== FLOWS =====
 GateDevice --> API
 Admin --> API
-Student --> GateDevice
 
-Logic --> IdentityService
-Logic --> NotificationService
+API --> Logic
+Logic --> DB
 
-ReportingService --> LogMgr
+Logic --> CoreService
+CoreService --> AnalyticsService
 ```
